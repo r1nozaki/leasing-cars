@@ -1,19 +1,24 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDebounce } from '@/src/hooks/useDebounce'
 
 export function SearchBar() {
 	const router = useRouter()
-	const params = useSearchParams()
-	const [query, setQuery] = useState(params.get('q') ?? '')
+	const searchParams = useSearchParams()
+	const [query, setQuery] = useState(searchParams.get('q') ?? '')
 
 	function onSubmit(e: React.FormEvent) {
 		e.preventDefault()
 
-		const next = new URLSearchParams(params.toString())
+		const next = new URLSearchParams(searchParams.toString())
 
-		query ? next.set('q', query) : next.delete('q')
+		if (query) {
+			next.set('q', query)
+		} else {
+			next.delete('q')
+		}
 
 		router.push(`/?${next.toString()}`)
 	}

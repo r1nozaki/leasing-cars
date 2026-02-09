@@ -34,8 +34,8 @@ export function CarCard({ car }: Props) {
 					>
 						<Heart
 							className={clsx(
-								'w-6 h-6 ',
-								active ? 'fill-red-500 text-red-500' : ''
+								'w-6 h-6 text-red-500 transition-colors duration-300',
+								active ? ' fill-red-500' : ''
 							)}
 						/>
 					</button>
