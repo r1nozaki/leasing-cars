@@ -20,7 +20,7 @@ export function Header() {
 					Leasing Cars
 				</Link>
 				<Link
-					href={'/favourites'}
+					href={'/favorites'}
 					className='relative flex items-center justify-center p-3 hover:rounded-full hover:bg-[#e5e5e5]'
 				>
 					<Heart

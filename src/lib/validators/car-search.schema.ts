@@ -13,3 +13,5 @@ export const carSearchSchema = z.object({
 
 	q: z.string().optional()
 })
+
+export type CarFilters = z.infer<typeof carSearchSchema>

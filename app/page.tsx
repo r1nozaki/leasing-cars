@@ -1,42 +1,26 @@
 import { prisma } from '@/src/lib/prisma'
-import { CarList } from '@/src/components/features/Car/CarList'
+import { CarsSection } from '@/src/components/features/Car/CarsSection'
 import { SearchBar } from '@/src/components/features/search/SearchBar'
 import { SidebarFilters } from '@/src/components/features/filters/SidebarFilters'
 import { carSearchSchema } from '@/src/lib/validators/car-search.schema'
-import type { z } from 'zod'
+import { CarGridSkeleton } from '@/src/components/features/Car/CarGridSkeleton'
+import { CarFilters } from '@/src/lib/validators/car-search.schema'
+import { Suspense } from 'react'
 
 type Props = {
 	searchParams: Record<string, string | string[] | undefined>
 }
 
-type Filters = z.infer<typeof carSearchSchema>
-
 export default async function CarCatalog({ searchParams }: Props) {
 	const params = await searchParams
 	const parsed = carSearchSchema.safeParse(params)
 
-	const filters: Partial<Filters> = parsed.success ? parsed.data : {}
+	const filters: Partial<CarFilters> = parsed.success ? parsed.data : {}
 
 	const brands = await prisma.car.findMany({
 		distinct: ['brand'],
 		select: { brand: true },
 		orderBy: { brand: 'asc' }
-	})
-
-	const cars = await prisma.car.findMany({
-		where: {
-			brand: filters.brand,
-			fuelType: filters.fuel ? { in: filters.fuel } : undefined,
-			model: filters.q ? { contains: filters.q } : undefined,
-			pricePerMonth:
-				filters.minPrice || filters.maxPrice
-					? {
-							gte: filters.minPrice,
-							lte: filters.maxPrice
-						}
-					: undefined
-		},
-		orderBy: { createdAt: 'desc' }
 	})
 
 	return (
@@ -49,7 +33,12 @@ export default async function CarCatalog({ searchParams }: Props) {
 					<SearchBar />
 				</div>
 
-				<CarList cars={cars} />
+				<Suspense
+					key={JSON.stringify(filters)}
+					fallback={<CarGridSkeleton count={15} />}
+				>
+					<CarsSection filters={filters} />
+				</Suspense>
 			</section>
 		</div>
 	)

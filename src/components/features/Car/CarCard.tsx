@@ -4,6 +4,7 @@ import type { Car } from '@prisma/client'
 import Image from 'next/image'
 import { Heart } from 'lucide-react'
 import { useFavoriteStore } from '@/src/store/favorites.store'
+import { toggleFavoriteAction } from '@/app/actions/favorite.actions'
 import clsx from 'clsx'
 import { formatRelativeDate } from '@/src/lib/date'
 
@@ -15,6 +16,13 @@ export function CarCard({ car }: Props) {
 	const ids = useFavoriteStore(s => s.ids)
 	const toggle = useFavoriteStore(s => s.toggle)
 	const active = ids.includes(car.id)
+
+	const handleToggle = async (e: React.MouseEvent) => {
+		e.preventDefault()
+		e.stopPropagation()
+
+		await toggle(car.id, toggleFavoriteAction)
+	}
 
 	return (
 		<li className='rounded-lg shadow-lg'>
@@ -28,7 +36,7 @@ export function CarCard({ car }: Props) {
 						className='object-cover w-full h-full rounded-t-lg'
 					/>
 					<button
-						onClick={() => toggle(car.id)}
+						onClick={handleToggle}
 						className={`absolute flex items-center justify-center w-12 h-12 bg-white rounded-full cursor-pointer bottom-2 right-2 hover:bg-[#ededed]`}
 						aria-label='Toggle favorite'
 					>

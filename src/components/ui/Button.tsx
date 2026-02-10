@@ -31,7 +31,7 @@ export function Button({
 	return (
 		<button
 			type='button'
-			className={`md:w-55.5 md:h-16 w-45 h-12 flex items-center justify-center gap-2 cursor-pointer text-sm md:text-base ${className}`}
+			className={`md:w-55.5 md:h-16 w-45 h-12 flex items-center justify-center rounded gap-2 cursor-pointer text-sm md:text-base ${className}`}
 			onClick={handleClick}
 			{...rest}
 		>
