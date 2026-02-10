@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 
-const FUELS = ['Electric', 'Hybrid', 'Gasoline', 'Diesel']
+const FUELS = ['ELECTRIC', 'HYBRID', 'GASOLINE', 'DIESEL']
 
 export function FuelFilter() {
 	const router = useRouter()

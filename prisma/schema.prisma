@@ -12,8 +12,8 @@ model Car {
   brand         String
   model         String
   pricePerMonth Int
-  fuelType      String   // ELECTRIC | HYBRID | GASOLINE | DIESEL
-  transmission  String   // Automatic | Manual
+  fuelType      String   
+  transmission  String   
   year          Int
   imageUrl      String
 
