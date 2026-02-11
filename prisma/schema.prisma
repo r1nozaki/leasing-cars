@@ -16,7 +16,7 @@ model Car {
   transmission  String   
   year          Int
   imageUrl      String
-
+  bodyType      String
   createdAt DateTime @default(now())
 
   favorites Favorite[]

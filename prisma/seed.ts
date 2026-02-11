@@ -3,6 +3,9 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
+	await prisma.favorite.deleteMany()
+	await prisma.car.deleteMany()
+
 	await prisma.car.createMany({
 		data: [
 			{
@@ -12,6 +15,7 @@ async function main() {
 				fuelType: 'ELECTRIC',
 				transmission: 'Automatic',
 				year: 2023,
+				bodyType: 'Sedan',
 				imageUrl: '/cars/previewBMWI4.jpg'
 			},
 			{
@@ -21,6 +25,7 @@ async function main() {
 				fuelType: 'DIESEL',
 				transmission: 'Automatic',
 				year: 2022,
+				bodyType: 'SUV',
 				imageUrl: '/cars/previewBMWX5.jpg'
 			},
 			{
@@ -30,6 +35,7 @@ async function main() {
 				fuelType: 'ELECTRIC',
 				transmission: 'Automatic',
 				year: 2023,
+				bodyType: 'Sedan',
 				imageUrl: '/cars/previewTeslaModel3.jpg'
 			},
 			{
@@ -39,6 +45,7 @@ async function main() {
 				fuelType: 'ELECTRIC',
 				transmission: 'Automatic',
 				year: 2022,
+				bodyType: 'SUV',
 				imageUrl: '/cars/previewTeslaModelY.jpg'
 			},
 			{
@@ -48,6 +55,7 @@ async function main() {
 				fuelType: 'GASOLINE',
 				transmission: 'Automatic',
 				year: 2021,
+				bodyType: 'Sedan',
 				imageUrl: '/cars/previewAudiA6.jpg'
 			},
 			{
@@ -57,6 +65,7 @@ async function main() {
 				fuelType: 'DIESEL',
 				transmission: 'Automatic',
 				year: 2022,
+				bodyType: 'SUV',
 				imageUrl: '/cars/previewAudiQ7.jpg'
 			},
 			{
@@ -66,6 +75,7 @@ async function main() {
 				fuelType: 'GASOLINE',
 				transmission: 'Automatic',
 				year: 2021,
+				bodyType: 'Sedan',
 				imageUrl: '/cars/previewMercedesAMGC63s.jpg'
 			},
 			{
@@ -75,6 +85,7 @@ async function main() {
 				fuelType: 'ELECTRIC',
 				transmission: 'Automatic',
 				year: 2023,
+				bodyType: 'Sedan',
 				imageUrl: '/cars/previewMercedesEQS.jpg'
 			},
 			{
@@ -84,6 +95,7 @@ async function main() {
 				fuelType: 'ELECTRIC',
 				transmission: 'Automatic',
 				year: 2022,
+				bodyType: 'SUV',
 				imageUrl: '/cars/previewVolkswagenID4.jpg'
 			},
 			{
@@ -93,6 +105,7 @@ async function main() {
 				fuelType: 'DIESEL',
 				transmission: 'Automatic',
 				year: 2020,
+				bodyType: 'Sedan',
 				imageUrl: '/cars/previewVolkswagenPassat.jpg'
 			},
 			{
@@ -102,6 +115,7 @@ async function main() {
 				fuelType: 'HYBRID',
 				transmission: 'Automatic',
 				year: 2021,
+				bodyType: 'SUV',
 				imageUrl: '/cars/previewToyotaRAV4.jpg'
 			},
 			{
@@ -111,6 +125,7 @@ async function main() {
 				fuelType: 'GASOLINE',
 				transmission: 'Automatic',
 				year: 2020,
+				bodyType: 'Sedan',
 				imageUrl: '/cars/previewToyotaCamry.jpg'
 			},
 			{
@@ -120,6 +135,7 @@ async function main() {
 				fuelType: 'ELECTRIC',
 				transmission: 'Automatic',
 				year: 2022,
+				bodyType: 'Hatchback',
 				imageUrl: '/cars/previewHyundaiIoniq5.jpg'
 			},
 			{
@@ -129,6 +145,7 @@ async function main() {
 				fuelType: 'HYBRID',
 				transmission: 'Automatic',
 				year: 2021,
+				bodyType: 'SUV',
 				imageUrl: '/cars/previewKiaSportage.jpg'
 			},
 			{
@@ -138,10 +155,13 @@ async function main() {
 				fuelType: 'ELECTRIC',
 				transmission: 'Automatic',
 				year: 2022,
+				bodyType: 'SUV',
 				imageUrl: '/cars/previewMustangMachE.jpg'
 			}
 		]
 	})
+
+	console.log('Seed completed successfully')
 }
 
 main()
