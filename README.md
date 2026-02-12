@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Installation & Run
 
-## Getting Started
+1. Clone the repository
 
-First, run the development server:
+git clone https://github.com/r1nozaki/leasing-cars.git cd leasing-cars
 
-```bash
+2. Install dependencies
+
+npm install
+
+3. Setup environment variables
+
+Create a .env file in the root of the project:
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/DATABASE_NAME"
+
+4. Push Prisma schema to database
+
+npx prisma db push
+
+5. Seed the database
+
+npx prisma db seed
+
+6. Run the development server
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Self-review
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Основні труднощі
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Робота з Prisma та взаємодія з базою даних
 
-## Learn More
+Найбільшим викликом на початку була робота з Prisma, оскільки раніше я не мав
+досвіду з ORM та серверною частиною. Це вже більше бекенд-напрямок, а мій
+основний фокус — фронтенд.
 
-To learn more about Next.js, take a look at the following resources:
+Спочатку було складно зрозуміти:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+як працює схема Prisma,
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+як відбувається синхронізація з базою (db push),
 
-## Deploy on Vercel
+як правильно формувати запити з умовною фільтрацією.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Я вирішив цю проблему через:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+детальне вивчення офіційної документації Prisma,
+
+перегляд кількох технічних відео,
+
+експерименти з тестовими запитами.
+
+У результаті я краще зрозумів принципи роботи ORM та взаємодію серверної логіки
+з клієнтською частиною. Це був цікавий досвід і хороший крок у розширенні
+технічного стеку.
+
+2. Синхронізація стану "Обраного"
+
+Викликом була реалізація системи лайків, яка б працювала миттєво для
+користувача, але при цьому залишалася надійною на стороні сервера.
+
+Миттєвий відгук: У сторі Zustand я реалізував логіку, яка спочатку оновлює
+локальний масив ids (додає або видаляє авто), що дає користувачу миттєву
+візуальну зміну стану кнопки (червоне серце).
+
+Асинхронна мутація: Паралельно з оновленням стору викликається серверний екшен
+toggleFavoriteAction, який записує зміни в базу даних через Prisma.
+
+Обробка помилок (Rollback): Якщо серверний запит зазнає невдачі (наприклад,
+проблеми зі зв'язком), стор автоматично відкочує зміни до попереднього стану
+(saved currentIds), повертаючи UI у відповідний стан.
+
+Валідація через Middleware: Щоб Server Action знав, чий саме це лайк (без
+авторизації), я інтегрував deviceId через Cookies, який перевіряється в
+Middleware перед кожним запитом.
+
+3. Досвід роботи з Zod
+
+У цьому проєкті я обрав Zod для валідації схем пошуку та фільтрації. Оскільки
+раніше я мав значний досвід роботи з Yup, перехід на Zod виявився дуже легким та
+інтуїтивно зрозумілим.
+
+Чому Zod став кращим вибором:
+
+Інтеграція з TypeScript: На відміну від Yup, де іноді доводиться дублювати типи,
+Zod дозволяє витягувати типи безпосередньо зі схеми за допомогою z.infer. Це
+забезпечило 100% типізацію фільтрів без зайвого коду.
+
+Функція .transform(): Це стало вирішальним фактором. Можливість "на льоту"
+перетворювати рядок з URL у число (coerce.number()) або приводити поодинокі
+значення до масиву для Prisma зробила обробку searchParams набагато чистішою.
+
+Синтаксична схожість: Логіка побудови об'єктів та методів .optional() чи
+.string() дуже схожа на Yup, що дозволило мені почати писати складні схеми вже з
+перших хвилин роботи з бібліотекою.

@@ -1,8 +1,7 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
-import { useDebounce } from '@/src/hooks/useDebounce'
+import React, { useState } from 'react'
 
 export function SearchBar() {
 	const router = useRouter()
